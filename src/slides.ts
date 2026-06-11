@@ -1,0 +1,341 @@
+import { Slide } from "./types/slide";
+
+export const slides: Slide[] = [
+  {
+    id: "cover",
+    layout: "cover",
+    eyebrow: "함수랑산악회",
+    title: "주니어 개발자의 커리어 등반기",
+    subtitle: "김성현\nFrontend Engineer",
+  },
+
+  {
+    id: "intro",
+    layout: "body",
+    eyebrow: "발표자 소개",
+    title: "김성현",
+    image: "/images/climbing.jpg",
+    imagePosition: "right",
+    bullets: [
+      "트리플오스 Frontend Engineer",
+      "함수랑산악회 1기 클라이머",
+    ],
+  },
+  {
+    id: "why",
+    layout: "body",
+    title: "목차",
+    bullets: [
+      "간단 소개",
+      "방향 찾기",
+      "시야 넓히기",
+      "커리어에 대한 오해",
+      "앞으로 하고 싶은 것",
+    ],
+  },
+
+  {
+    id: "before",
+    layout: "body",
+    title: "간단 소개",
+    image: "/images/what.jpg",
+    imagePosition: "right",
+    bullets: [
+      "신학과 졸업 (무교)",
+      "20대의 7년을 날림",
+      "내가 정말 좋아하는 일은 뭘까",
+      "SSAFY 입과",
+    ],
+  },
+
+  {
+    id: "first-company-story",
+    layout: "body",
+    title: "구스랩스",
+    bullets: [
+      "Unity 개발",
+      "코드 리뷰, 협업하는 방법",
+      "9개월 차에 서비스 종료",
+      "멀리서 볼 때 가장 아름답다",
+    ],
+    images: ["/images/goose1.jpg", "/images/goose2.jpg"],
+    imagesPosition: "right",
+  },
+
+  {
+    id: "part-2",
+    layout: "section",
+    eyebrow: "Part 2.",
+    title: "방향 찾기",
+  },
+
+  {
+    id: "ssafy-popular",
+    layout: "body",
+    title: "결과는 처참했다",
+    image: "/images/fail.jpg",
+    imagePosition: "center",
+    bullets: [
+      "판교의 이쁜 카페들",
+      "(하마터면 납치될 뻔 했네)",
+    ],
+  },
+
+  {
+    id: "ssafy-popular",
+    layout: "body",
+    title: "다시 Web으로",
+    bullets: [
+      "SSAFY 때 퍼블리싱은 잘했음",
+      "3번의 수상 (최우수상, 우수상 2번)",
+      "근데 이력서에 쓸 게 아무것도 없다",
+    ],
+  },
+
+  {
+    id: "steps",
+    layout: "body",
+    title: "Plan 1. 자기객관화",
+    bullets: [
+      "솔직히 회사 가면 잘 할 수 있는데",
+      "내가 뭔가를 알고 있다는 생각을 버리자",
+    ],
+  },
+
+    {
+    id: "steps",
+    layout: "body",
+    title: "Plan 2. 추상적인 생각을 구체화하기",
+    bullets: [
+      "진짜 성장하고 싶다",
+      "누가 좀 알려줬으면 좋겠다",
+      "취업은 대체 어떻게 하는 걸까?",
+    ],
+  },
+
+  {
+    id: "jazz",
+    layout: "body",
+    title: "재즈 배우던 시절",
+    video: "/videos/jazz.webm",
+    videoPosition: "right",
+    bullets: [
+      "진짜 성장하고 싶다",
+      "누가 좀 알려줬으면 좋겠다",
+      "대체 어떻게 성공할까?",
+    ],
+  },
+
+  {
+    id: "jazz-lesson",
+    layout: "body",
+    title: "당시에 느낀 것",
+    bullets: [
+      "절대적인 양이 필요하다",
+      "큰 문제를 잘게 쪼개자",
+      "잘 치는 사람을 무작정 따라했더니 길을 잃는다",
+      {
+        text: "성장은 계단식이다. 조급하지 말자",
+        children: [
+          "꾸준히 느는 게 아니라, 자고 일어나면 확 늘어있더라",
+        ],
+      },
+    ],
+  },
+
+  {
+    id: "apply",
+    layout: "body",
+    title: "Action 1. 지원 많이 하기",
+    bullets: [
+      "서류 100개 넣으면 다 떨어진다? - 이력서 문제",
+      "과제와 면접 떨어진다? - 어떤 걸 공부해야 할 지 명확해짐",
+    ],
+  },
+
+  {
+    id: "apply",
+    layout: "body",
+    title: "Action 2. 다른 사람들 만나기",
+    bullets: [
+      "실음과 학생들과의 재즈 앙상블",
+      "너는 전혀 스윙하고 있지 않아",
+      "링크드인, 테오콘, 함수랑산악회 등 네트워킹",
+    ],
+  },
+
+  {
+    id: "part-2",
+    layout: "section",
+    eyebrow: "Part 2.",
+    title: "시야 넓히기",
+  },
+
+  {
+    id: "quit-series",
+    layout: "body",
+    title: "성능을 개선하고 싶다",
+    video: "/videos/animation.webm",
+    videoMode: "loop",
+    videoPosition: "right",
+    bullets: [
+      "텍스트 애니메이션 라이브러리",
+      "3중 for문...",
+      "Lighthouse 경고 봐도 모르겠음"
+    ],
+  },
+
+  {
+    id: "steps",
+    layout: "body",
+    title: "무료로 성능 개선 해드립니다!",
+    images: ["/images/help.jpg", "/images/feedback.jpg"],
+    imagesPosition: "right",
+    imagesMode: "step",
+  },
+
+  {
+    id: "steps",
+    layout: "body",
+    title: "Deep Dive 베타리더 제안",
+    images: ["/images/proposal.jpg", "/images/book-review.webp"],
+  },
+
+
+  {
+    id: "company-1",
+    layout: "body",
+    title: "베타 리딩을 통해 배운 것",
+    bullets: [
+      "웹 개발에 대한 시야가 좀 더 넓어짐",
+      "화려한 애니메이션보단 자바스크립트 없이도 내용이 보이는 것",
+      "결국 리소스를 적절한 시점에 불러오는 것(당기거나 늦추거나)",
+      "귀찮으니까 자동화하자",
+    ],
+  },
+  
+  {
+    id: "company-1",
+    layout: "body",
+    title: "전공자 따라잡기",
+    bullets: [
+      "함수랑산악회 1기",
+      "방통대 컴퓨터과학과 편입",
+      "정보처리기사, SQLD",
+      "한 달의 반 이상은 스터디 카페",
+    ],
+  },
+
+  {
+    id: "part-3",
+    layout: "section",
+    eyebrow: "Part 3.",
+    title: "커리어에 대한 오해",
+  },
+
+  {
+    id: "company-2",
+    layout: "body",
+    title: "6개월 만의 깡퇴사",
+    bullets: [
+      "스트레스",
+      "열심히 공부할수록 빨리 더 나은 곳에 가고 싶었음",
+      "커리어는 걱정되지만 1년은 못 다니겠다",
+    ],
+  },
+
+  {
+    id: "after-quit",
+    layout: "body",
+    title: "퇴사 당시의 마음가짐",
+    image: "/images/icandoit.jpg",
+    imagePosition: "right",
+    bullets: [
+      "이번엔 불안해도 아무데나 가지말고, 정말 가고 싶은 곳에 지원하자",
+    ],
+  },
+
+  {
+    id: "after-quit",
+    layout: "body",
+    title: "현실",
+    image: "/images/fail.jpg",
+    imagePosition: "right",
+    bullets: [
+      "이대로 1-2년을 공부해도 취업 못하겠다",
+      "2주간 행복함",
+      "숨 쉬면 나가는 돈, 오히려 막 쓰게 됨",
+      "기존의 취업 고민 + 커리어 고민 추가",
+      "달라지는 채용 프로세스",
+    ],
+  },
+
+  {
+    id: "new-company",
+    layout: "body",
+    title: "배운 것",
+    bullets: [
+      "개인 활동은 커리어가 아니다",
+      "경력이 커리어다",
+    ],
+  },
+
+  {
+    id: "part-4",
+    layout: "section",
+    eyebrow: "Part 4.",
+    title: "앞으로 할 일",
+  },
+
+
+  {
+    id: "new-company-lesson-1",
+    layout: "body",
+    title: "근무태도",
+    bullets: [
+      "일찍 자고, 일찍 출근하기",
+      "회사에 뭐가 도움이 될까?",
+    ],
+  },
+
+  {
+    id: "new-company-lesson-2",
+    layout: "body",
+    title: "회사는 사회생활",
+    bullets: [
+      "무작정 개선보단 팀의 관심사 찾기",
+      "회사는 일하러 오는 곳",
+      "사람마다 성격이 다름",
+    ],
+  },
+
+  {
+    id: "future",
+    layout: "body",
+    title: "고민하고 있는 것",
+    bullets: [
+      "그냥 넘긴 것들", 
+      "엣지 케이스 잘 고려하기", 
+      "프론트엔드의 한계?"
+    ],
+  },
+
+  {
+    id: "outro",
+    layout: "body",
+    title: "마치며",
+    bullets: [
+      "긴장을 해소할 때 좋다고 느낀다", 
+      "한 번 치면 이상한 음, 두 번 치면 재즈",
+      "커리어의 오점 덮기, 버티기"
+    ],
+  },
+
+  {
+    id: "thanks",
+    layout: "closing",
+    title: "감사합니다!",
+    body: "발표 자료는 함수랑산악회 노션을 통해 확인하실 수 있습니다.",
+    subtitle: "함바! 👋",
+  },
+];

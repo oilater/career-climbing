@@ -1,0 +1,477 @@
+:root {
+  --ink: #0f172a;
+  --ink-soft: #1e293b;
+  --ink-muted: #64748b;
+  /* 콘텐츠 영역 고정 위치 */
+  --pad-top: 26vh;
+  --pad-side: 9vw;
+  --content-max: 1100px;
+  font-family: "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", "Apple SD Gothic Neo", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000;
+  color: var(--ink);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+kbd {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================== Viewer ============================== */
+.viewer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.edge:disabled {
+  cursor: not-allowed;
+}
+
+.edge--left {
+  left: 0;
+}
+
+.edge--right {
+  right: 0;
+}
+
+.hud {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(10px);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.hud--visible {
+  opacity: 1;
+}
+
+.hud__count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.hud__sep {
+  opacity: 0.4;
+  margin: 0 2px;
+}
+
+.hud__hint {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(15, 23, 42, 0.08);
+  opacity: 0;
+  z-index: 20;
+}
+
+.progress--visible {
+  opacity: 1;
+}
+
+.progress__bar {
+  height: 100%;
+  background: #34d399;
+}
+
+/* ============================== Slide (all share identical frame) ============================== */
+.slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+  color: var(--ink);
+  padding: var(--pad-top) var(--pad-side) 14vh;
+}
+
+.slide__part {
+  position: absolute;
+  top: 7vh;
+  left: var(--pad-side);
+  font-size: clamp(13px, 1vw, 16px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  z-index: 3;
+}
+
+.mountain-backdrop {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 62%;
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+  object-position: right bottom;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.slide__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ============================== Typography (identical across slides) ============================== */
+.eyebrow {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+
+.slide__title {
+  font-size: clamp(30px, 3.6vw, 44px);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  margin: 0;
+  font-weight: 700;
+  white-space: pre-line;
+}
+
+.slide__sub {
+  font-size: clamp(18px, 1.85vw, 26px);
+  color: var(--ink-soft);
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.slide__body {
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+  white-space: pre-line;
+}
+
+.slide__emphasize {
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.slide__video {
+  display: block;
+  border-radius: 12px;
+  outline: none;
+  height: auto;
+  width: auto;
+}
+
+.slide__video--center {
+  max-width: min(560px, 100%);
+  max-height: 38vh;
+  align-self: center;
+}
+
+.slide__video--right {
+  max-width: 100%;
+  max-height: 55vh;
+}
+
+.slide__content--row {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 48px;
+  min-height: 100%;
+  margin-top: -6vh;
+}
+
+.slide__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.slide__media-col {
+  flex: 0 0 52%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  align-self: center;
+  min-width: 0;
+  max-height: 75vh;
+}
+
+.slide__image {
+  display: block;
+  border-radius: 12px;
+  height: auto;
+  width: auto;
+}
+
+.slide__image--center {
+  max-width: min(900px, 100%);
+  max-height: 60vh;
+  align-self: center;
+  margin-top: 8px;
+}
+
+.slide__image--right {
+  max-width: 100%;
+  max-height: 70vh;
+}
+
+.slide__images {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2%;
+  margin-top: 6px;
+}
+
+.slide__images-item {
+  display: block;
+  max-width: 49%;
+  max-height: 65vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.slide__images--fill {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  margin-top: 0;
+}
+
+.slide__images-item--fill {
+  max-height: 100%;
+}
+
+.slide__images-stack {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 36vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.slide__images--step .slide__images-item {
+  max-width: 100%;
+  max-height: 65vh;
+}
+
+/* ============================== Section divider (full screen) ============================== */
+.slide--section {
+  padding: 0 9vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide--section .slide__content {
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  max-width: 1200px;
+}
+
+.slide--section .eyebrow {
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.slide--section .slide__title {
+  font-size: clamp(48px, 6.5vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.slide--section .slide__sub {
+  font-size: clamp(20px, 1.9vw, 28px);
+  color: var(--ink-muted);
+}
+
+/* ============================== Cover (special layout) ============================== */
+.slide--cover {
+  padding: 18vh 9vw 16vh;
+}
+
+.cover {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cover__top {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cover__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.cover__title {
+  font-size: clamp(40px, 5.2vw, 68px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0;
+  font-weight: 800;
+  white-space: pre-line;
+}
+
+.cover__sub {
+  font-size: clamp(18px, 1.9vw, 28px);
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: pre-line;
+}
+
+/* ============================== Bullets ============================== */
+.bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bullets--depth-1 {
+  margin-top: 8px;
+  margin-left: 6px;
+  gap: 6px;
+}
+
+.bullet {
+  font-size: clamp(17px, 1.75vw, 24px);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  position: relative;
+  padding-left: 24px;
+}
+
+.bullets--dash > .bullet::before {
+  content: "-";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: var(--ink-muted);
+}
+
+.bullets--number {
+  counter-reset: idx;
+}
+
+.bullets--number > .bullet {
+  counter-increment: idx;
+  padding-left: 28px;
+}
+
+.bullets--number > .bullet::before {
+  content: counter(idx) ".";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.bullets--depth-1 > .bullet {
+  font-size: clamp(15px, 1.5vw, 20px);
+  color: var(--ink-muted);
+}
+
+.bullet__hint {
+  color: var(--ink-muted);
+}
+
+/* ============================== Responsive ============================== */
+@media (max-width: 720px) {
+  :root {
+    --pad-top: 18vh;
+    --pad-side: 28px;
+  }
+}
