@@ -91,15 +91,33 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     />
   );
 
+  const badgeMatch = slide.title?.match(/^([A-Za-z]+\s+\d+)\.\s+(.+)$/);
+
+  const visibleBullets =
+    slide.bullets && slide.revealFrom != null
+      ? slide.bullets.slice(
+          0,
+          Math.min(slide.bullets.length, slide.revealFrom + step)
+        )
+      : slide.bullets;
+
   const text = (
     <>
       {slide.eyebrow && <div className="eyebrow">{slide.eyebrow}</div>}
-      {slide.title && <h1 className="slide__title">{slide.title}</h1>}
+      {slide.title &&
+        (badgeMatch ? (
+          <div className="slide__heading">
+            <span className="slide__badge">{badgeMatch[1]}</span>
+            <h1 className="slide__title">{badgeMatch[2]}</h1>
+          </div>
+        ) : (
+          <h1 className="slide__title">{slide.title}</h1>
+        ))}
       {slide.subtitle && <p className="slide__sub">{slide.subtitle}</p>}
       {slide.body && <p className="slide__body">{slide.body}</p>}
       {!videoRight && videoEl}
-      {slide.bullets && (
-        <BulletList items={slide.bullets} style={slide.bulletStyle ?? "dash"} />
+      {visibleBullets && (
+        <BulletList items={visibleBullets} style={slide.bulletStyle ?? "dash"} />
       )}
       {slide.emphasize && (
         <p className="slide__emphasize">→ {slide.emphasize}</p>

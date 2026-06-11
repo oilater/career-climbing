@@ -27,7 +27,13 @@ export default function App() {
 
   const stepsFor = useCallback((i: number): number => {
     const s = slides[i];
-    return s?.imagesMode === "step" && s.images ? s.images.length : 1;
+    if (!s) return 1;
+    let n = 1;
+    if (s.imagesMode === "step" && s.images) n = s.images.length;
+    if (s.revealFrom != null && s.bullets) {
+      n = Math.max(n, 1 + (s.bullets.length - s.revealFrom));
+    }
+    return n;
   }, []);
 
   const goTo = useCallback((target: number) => {
@@ -89,7 +95,12 @@ export default function App() {
 
   return (
     <div className="viewer" onMouseMove={() => setShowHud(true)}>
-      <SlideView slide={slide} part={partLabels[index]} step={step} />
+      <SlideView
+        key={`${slide.layout}:${slide.title ?? index}`}
+        slide={slide}
+        part={partLabels[index]}
+        step={step}
+      />
 
       <button
         className="edge edge--left"

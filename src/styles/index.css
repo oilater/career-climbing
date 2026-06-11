@@ -320,6 +320,11 @@ kbd {
   border-radius: 12px;
 }
 
+/* A single right-side image gets much more room */
+.slide__media-col .slide__images-stack:only-child {
+  max-height: 72vh;
+}
+
 .slide__images--step .slide__images-item {
   max-width: 100%;
   max-height: 65vh;
@@ -433,11 +438,15 @@ kbd {
 }
 
 .bullets--dash > .bullet::before {
-  content: "-";
+  content: "";
   position: absolute;
   left: 4px;
-  top: 0;
-  color: var(--ink-muted);
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  transform: rotate(45deg);
 }
 
 .bullets--number {
@@ -446,16 +455,25 @@ kbd {
 
 .bullets--number > .bullet {
   counter-increment: idx;
-  padding-left: 28px;
+  padding-left: 46px;
+  min-height: 30px;
 }
 
 .bullets--number > .bullet::before {
-  content: counter(idx) ".";
+  content: counter(idx);
   position: absolute;
   left: 0;
-  top: 0;
-  font-weight: 600;
-  color: var(--ink);
+  top: 0.05em;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.16);
+  color: #047857;
+  font-size: 0.72em;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
@@ -466,6 +484,159 @@ kbd {
 
 .bullet__hint {
   color: var(--ink-muted);
+}
+
+/* ============================== Polish: body & section ============================== */
+@keyframes ce-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ce-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Container only fades, so children can stagger-rise cleanly on top.
+   Section (Part) dividers stay still — no entrance animation. */
+.slide--body .slide__content {
+  animation: ce-fade 0.4s ease both;
+}
+
+/* Each piece rises in sequence — body slides only */
+.slide--body .slide__content:not(.slide__content--row)::before,
+.slide--body .slide__text::before,
+.slide--body .eyebrow,
+.slide--body .slide__badge,
+.slide--body .slide__title,
+.slide--body .slide__sub,
+.slide--body .slide__body,
+.slide--body .slide__emphasize,
+.slide--body .slide__media-col,
+.slide--body .bullet {
+  animation: ce-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.slide--body .slide__badge {
+  animation-delay: 0.04s;
+}
+.slide--body .slide__title {
+  animation-delay: 0.08s;
+}
+.slide--body .slide__sub,
+.slide--body .slide__body {
+  animation-delay: 0.14s;
+}
+.slide--body .slide__media-col {
+  animation-delay: 0.16s;
+}
+
+.slide--body .bullet:nth-child(1) {
+  animation-delay: 0.18s;
+}
+.slide--body .bullet:nth-child(2) {
+  animation-delay: 0.25s;
+}
+.slide--body .bullet:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.slide--body .bullet:nth-child(4) {
+  animation-delay: 0.39s;
+}
+.slide--body .bullet:nth-child(5) {
+  animation-delay: 0.46s;
+}
+.slide--body .bullet:nth-child(6) {
+  animation-delay: 0.53s;
+}
+.slide--body .bullet:nth-child(7) {
+  animation-delay: 0.6s;
+}
+
+/* Nested bullets ride with their parent, no extra delay */
+.slide--body .bullets--depth-1 .bullet {
+  animation: none;
+}
+
+/* Accent bar at the top-left of every body slide */
+.slide--body .slide__content:not(.slide__content--row)::before,
+.slide--body .slide__text::before {
+  content: "";
+  flex: none;
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+/* Plan / Action heading badge */
+.slide__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.slide__badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  color: #fff;
+  font-size: clamp(13px, 1.05vw, 17px);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* Section divider refinements */
+.slide--section .eyebrow {
+  display: inline-block;
+  padding: 7px 18px;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.15);
+  color: #047857;
+  letter-spacing: 0.08em;
+}
+
+.slide--section .slide__content::after {
+  content: "";
+  width: 64px;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #34d399, #10b981);
+  margin-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide--body .slide__content,
+  .slide--section .slide__content,
+  .slide--body .slide__content::before,
+  .slide--body .slide__text::before,
+  .slide--body .eyebrow,
+  .slide--body .slide__badge,
+  .slide--body .slide__title,
+  .slide--body .slide__sub,
+  .slide--body .slide__body,
+  .slide--body .slide__emphasize,
+  .slide--body .slide__media-col,
+  .slide--body .bullet,
+  .slide--section .eyebrow,
+  .slide--section .slide__title,
+  .slide--section .slide__sub,
+  .slide--section .slide__content::after {
+    animation: none !important;
+  }
 }
 
 /* ============================== Responsive ============================== */

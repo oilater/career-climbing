@@ -17,6 +17,7 @@ export interface Slide {
   body?: string;
   bullets?: Bullet[];
   bulletStyle?: "dash" | "number";
+  revealFrom?: number;
   emphasize?: string;
   video?: string;
   videoPosition?: "center" | "right";

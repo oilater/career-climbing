@@ -35,14 +35,21 @@ export const slides: Slide[] = [
   },
 
   {
+    id: "part-1",
+    layout: "section",
+    eyebrow: "Part 1.",
+    title: "간단 소개",
+  },
+
+  {
     id: "before",
     layout: "body",
-    title: "간단 소개",
+    title: "날려버린 20대",
     image: "/images/what.jpg",
     imagePosition: "right",
     bullets: [
       "신학과 졸업 (무교)",
-      "20대의 7년을 날림",
+      "7-8년",
       "내가 정말 좋아하는 일은 뭘까",
       "SSAFY 입과",
     ],
@@ -56,9 +63,23 @@ export const slides: Slide[] = [
       "Unity 개발",
       "코드 리뷰, 협업하는 방법",
       "9개월 차에 서비스 종료",
+    ],
+    images: ["/images/goose1.jpg"],
+    imagesPosition: "right",
+  },
+
+  {
+    id: "first-company-story",
+    layout: "body",
+    title: "구스랩스",
+    bullets: [
+      "Unity 개발",
+      "코드 리뷰, 협업하는 방법",
+      "9개월 차에 서비스 종료",
       "멀리서 볼 때 가장 아름답다",
     ],
-    images: ["/images/goose1.jpg", "/images/goose2.jpg"],
+    revealFrom: 3,
+    images: ["/images/goose2.jpg"],
     imagesPosition: "right",
   },
 
@@ -198,7 +219,16 @@ export const slides: Slide[] = [
     id: "steps",
     layout: "body",
     title: "Deep Dive 베타리더 제안",
-    images: ["/images/proposal.jpg", "/images/book-review.webp"],
+    images: ["/images/proposal.jpg"],
+    imagesPosition: "right",
+  },
+
+  {
+    id: "steps",
+    layout: "body",
+    title: "Deep Dive 베타리더 제안",
+    images: ["/images/book-review.webp"],
+    imagesPosition: "right",
   },
 
 
@@ -247,7 +277,7 @@ export const slides: Slide[] = [
   {
     id: "after-quit",
     layout: "body",
-    title: "퇴사 당시의 마음가짐",
+    title: "퇴사 당시 마음가짐",
     image: "/images/icandoit.jpg",
     imagePosition: "right",
     bullets: [
@@ -277,6 +307,7 @@ export const slides: Slide[] = [
     bullets: [
       "개인 활동은 커리어가 아니다",
       "경력이 커리어다",
+      "애정을 갖고 만들 수 있는 회사에 가자",
     ],
   },
 
