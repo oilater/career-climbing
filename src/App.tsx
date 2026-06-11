@@ -14,6 +14,15 @@ function computePartLabels(): (string | undefined)[] {
   });
 }
 
+function stepsFor(i: number): number {
+  const s = slides[i];
+  if (!s) return 1;
+  if (s.imagesMode === "step" && s.images) return s.images.length;
+  if (s.layout === "body" && !s.revealAll)
+    return (s.bullets?.length ?? 0) + 1 + (s.flashback ? 1 : 0);
+  return 1;
+}
+
 export default function App() {
   const [index, setIndex] = useState(() => {
     const hash = parseInt(window.location.hash.replace("#", ""), 10);
@@ -25,44 +34,33 @@ export default function App() {
   const [showHud, setShowHud] = useState(true);
   const partLabels = useMemo(computePartLabels, []);
 
-  const stepsFor = useCallback((i: number): number => {
-    const s = slides[i];
-    if (!s) return 1;
-    let n = 1;
-    if (s.imagesMode === "step" && s.images) n = s.images.length;
-    if (s.revealFrom != null && s.bullets) {
-      n = Math.max(n, 1 + (s.bullets.length - s.revealFrom));
-    }
-    return n;
-  }, []);
-
-  const goTo = useCallback((target: number) => {
-    setIndex(Math.max(0, Math.min(target, slides.length - 1)));
-    setStep(0);
-  }, []);
-
   const next = useCallback(() => {
-    const steps = stepsFor(index);
-    if (step < steps - 1) {
+    if (step < stepsFor(index) - 1) {
       setStep((s) => s + 1);
     } else if (index < slides.length - 1) {
       setIndex(index + 1);
       setStep(0);
     }
-  }, [index, step, stepsFor]);
+  }, [index, step]);
 
   const prev = useCallback(() => {
     if (step > 0) {
       setStep((s) => s - 1);
     } else if (index > 0) {
-      const target = index - 1;
-      setIndex(target);
-      setStep(stepsFor(target) - 1);
+      setIndex(index - 1);
+      setStep(stepsFor(index - 1) - 1);
     }
-  }, [index, step, stepsFor]);
+  }, [index, step]);
 
-  const first = useCallback(() => goTo(0), [goTo]);
-  const last = useCallback(() => goTo(slides.length - 1), [goTo]);
+  const first = useCallback(() => {
+    setIndex(0);
+    setStep(0);
+  }, []);
+
+  const last = useCallback(() => {
+    setIndex(slides.length - 1);
+    setStep(0);
+  }, []);
 
   const toggleFullscreen = useCallback(() => {
     if (document.fullscreenElement) {

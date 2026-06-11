@@ -8,7 +8,6 @@ export const slides: Slide[] = [
     title: "주니어 개발자의 커리어 등반기",
     subtitle: "김성현\nFrontend Engineer",
   },
-
   {
     id: "intro",
     layout: "body",
@@ -20,69 +19,53 @@ export const slides: Slide[] = [
       "트리플오스 Frontend Engineer",
       "함수랑산악회 1기 클라이머",
     ],
+    revealAll: true
   },
   {
     id: "why",
     layout: "body",
     title: "목차",
     bullets: [
-      "간단 소개",
+      "간단한 소개",
       "방향 찾기",
       "시야 넓히기",
       "커리어에 대한 오해",
       "앞으로 하고 싶은 것",
     ],
+    revealAll: true
   },
 
   {
     id: "part-1",
     layout: "section",
     eyebrow: "Part 1.",
-    title: "간단 소개",
+    title: "저를 소개합니다",
   },
 
   {
     id: "before",
     layout: "body",
-    title: "날려버린 20대",
-    image: "/images/what.jpg",
-    imagePosition: "right",
+    title: "신학과 졸업",
     bullets: [
-      "신학과 졸업 (무교)",
-      "7-8년",
-      "내가 정말 좋아하는 일은 뭘까",
-      "SSAFY 입과",
+      { text: "무교", image: "/images/mugyo.webp" },
+      { text: "7년", image: "/images/break.jpg" },
+      { text: "내가 좋아하는 일은 뭘까", image: "/images/ssen.webp" },
+      { text: "SSAFY 입과", image: "/images/ssafy.webp" },
     ],
   },
 
   {
     id: "first-company-story",
     layout: "body",
-    title: "구스랩스",
+    title: "첫 회사",
     bullets: [
-      "Unity 개발",
-      "코드 리뷰, 협업하는 방법",
-      "9개월 차에 서비스 종료",
+      { text: "Unity로 운동 앱 개발", image: "/images/goose1.jpg" },
+      { text: "밀착 코드 리뷰, 협업하는 방법", image: "/images/code-review.webp" },
+      { text: "넌 못 지나간다", video: "/videos/run-to-merge.webm" },
+      { text: "서비스 종료", image: "/images/broke-up.webp" },
+      { text: "게임은 멀리서 볼 때 가장 아름답다" },
     ],
-    images: ["/images/goose1.jpg"],
-    imagesPosition: "right",
   },
-
-  {
-    id: "first-company-story",
-    layout: "body",
-    title: "구스랩스",
-    bullets: [
-      "Unity 개발",
-      "코드 리뷰, 협업하는 방법",
-      "9개월 차에 서비스 종료",
-      "멀리서 볼 때 가장 아름답다",
-    ],
-    revealFrom: 3,
-    images: ["/images/goose2.jpg"],
-    imagesPosition: "right",
-  },
-
   {
     id: "part-2",
     layout: "section",
@@ -91,28 +74,41 @@ export const slides: Slide[] = [
   },
 
   {
-    id: "ssafy-popular",
+    id: "first-company-story",
     layout: "body",
-    title: "결과는 처참했다",
-    image: "/images/fail.jpg",
-    imagePosition: "center",
+    title: "취업은 해야지",
     bullets: [
-      "판교의 이쁜 카페들",
-      "(하마터면 납치될 뻔 했네)",
+      { text: "지원내역", image: "/images/fail.jpg" },
+      { text: "판교의 이쁜 카페", image: "/images/pangyo-cafe.webp" },
+      { text: "(다행이야 납치될 뻔 했네)" },
     ],
   },
 
   {
     id: "ssafy-popular",
     layout: "body",
-    title: "다시 Web으로",
+    title: "Web 기억을 되살려보면",
     bullets: [
       "SSAFY 때 퍼블리싱은 잘했음",
-      "3번의 수상 (최우수상, 우수상 2번)",
+      "3번의 수상 (전공반 최우수상, 2학기 우수상 2번)",
       "근데 이력서에 쓸 게 아무것도 없다",
     ],
   },
-
+  {
+    id: "steps",
+    layout: "body",
+    title: "매일 했던 생각들",
+    bullets: [
+      "진짜 성장하고 싶다",
+      "누가 좀 알려줬으면 좋겠다",
+      "취업은 대체 어떻게 하는 걸까?",
+    ],
+    flashback: {
+      title: "재즈 배우던 시절",
+      video: "/videos/jazz.webm",
+      lastBullet: "대체 어떻게 성공할까?",
+    },
+  },
   {
     id: "steps",
     layout: "body",
@@ -122,31 +118,6 @@ export const slides: Slide[] = [
       "내가 뭔가를 알고 있다는 생각을 버리자",
     ],
   },
-
-    {
-    id: "steps",
-    layout: "body",
-    title: "Plan 2. 추상적인 생각을 구체화하기",
-    bullets: [
-      "진짜 성장하고 싶다",
-      "누가 좀 알려줬으면 좋겠다",
-      "취업은 대체 어떻게 하는 걸까?",
-    ],
-  },
-
-  {
-    id: "jazz",
-    layout: "body",
-    title: "재즈 배우던 시절",
-    video: "/videos/jazz.webm",
-    videoPosition: "right",
-    bullets: [
-      "진짜 성장하고 싶다",
-      "누가 좀 알려줬으면 좋겠다",
-      "대체 어떻게 성공할까?",
-    ],
-  },
-
   {
     id: "jazz-lesson",
     layout: "body",
@@ -306,9 +277,9 @@ export const slides: Slide[] = [
     title: "배운 것",
     bullets: [
       "개인 활동은 커리어가 아니다",
-      "경력이 커리어다",
       "애정을 갖고 만들 수 있는 회사에 가자",
     ],
+    emphasize: "경력이 커리어다",
   },
 
   {

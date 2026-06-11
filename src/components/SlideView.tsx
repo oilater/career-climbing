@@ -1,3 +1,5 @@
+import { useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import { Bullet, Slide } from "../types/slide";
 import { MountainBackdrop, MountainLogo } from "./MountainBackdrop";
 
@@ -7,7 +9,134 @@ interface Props {
   step?: number;
 }
 
+function SplitChars({ text }: { text: string }) {
+  return (
+    <>
+      {Array.from(text).map((ch, i) =>
+        ch === "\n" ? (
+          <br key={i} />
+        ) : (
+          <span key={i} className="ce-char" aria-hidden="true">
+            {ch === " " ? " " : ch}
+          </span>
+        )
+      )}
+    </>
+  );
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 export function SlideView({ slide, part, step = 0 }: Props) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const reveal = !slide.revealAll;
+  const bulletCount = slide.bullets?.length ?? 0;
+  const flashed = !!slide.flashback && reveal && step > bulletCount;
+  const [swapped, setSwapped] = useState(false);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root || slide.layout !== "body" || prefersReducedMotion()) return;
+
+    const q = (sel: string) => Array.from(root.querySelectorAll<HTMLElement>(sel));
+    const tl = gsap.timeline({ defaults: { ease: "power1.out" } });
+    const add = (els: HTMLElement[], vars: gsap.TweenVars, at?: number | string) => {
+      if (els.length) tl.from(els, vars, at);
+    };
+
+    add(q(".eyebrow, .slide__badge"), { opacity: 0, y: 6, duration: 0.5 }, 0);
+    add(
+      q(".ce-char"),
+      { opacity: 0, duration: 0.6, stagger: { amount: 0.14 }, ease: "sine.out" },
+      0.1
+    );
+    add(q(".slide__sub, .slide__body, .slide__emphasize"), { opacity: 0, y: 6, duration: 0.5 }, 0.2);
+    add(q(".slide__media-col, .slide__images--fill"), { opacity: 0, y: 8, duration: 0.55 }, 0.15);
+    add(
+      q(".bullets > .bullet"),
+      { opacity: 0, y: 8, duration: 0.4, stagger: { amount: 0.18 } },
+      0.25
+    );
+
+    return () => {
+      tl.revert();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!flashed) {
+      setSwapped(false);
+      return;
+    }
+    const veil = root?.querySelector<HTMLElement>(".slide__flashback-veil");
+    if (!veil || prefersReducedMotion()) {
+      setSwapped(true);
+      return;
+    }
+    const tl = gsap.timeline();
+    tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power1.in" })
+      .add(() => setSwapped(true))
+      .to({}, { duration: 0.8 })
+      .to(veil, { opacity: 0, duration: 1.1, ease: "power1.out" });
+    return () => {
+      tl.revert();
+    };
+  }, [flashed]);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root || slide.layout !== "body" || step === 0 || flashed || prefersReducedMotion())
+      return;
+
+    const bullets = Array.from(
+      root.querySelectorAll<HTMLElement>(".bullets > .bullet")
+    );
+    const targets: HTMLElement[] = [];
+    const last = bullets[bullets.length - 1];
+    if (last) targets.push(last);
+    const emph = root.querySelector<HTMLElement>(".slide__emphasize");
+    if (emph) targets.push(emph);
+    if (!targets.length) return;
+    const tween = gsap.from(targets, {
+      opacity: 0,
+      y: 8,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+    return () => {
+      tween.revert();
+    };
+  }, [step, slide.layout, flashed]);
+
+  let bulletImage: string | undefined;
+  let bulletVideo: string | undefined;
+  if (slide.layout === "body" && slide.bullets) {
+    const upTo = reveal ? Math.min(slide.bullets.length, step) : slide.bullets.length;
+    for (let i = upTo - 1; i >= 0; i--) {
+      const b = slide.bullets[i];
+      if (typeof b !== "string" && (b.image || b.video)) {
+        bulletImage = b.image;
+        bulletVideo = b.video;
+        break;
+      }
+    }
+  }
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root || (!bulletImage && !bulletVideo) || prefersReducedMotion())
+      return;
+    const el = root.querySelector<HTMLElement>(".slide__bullet-media");
+    if (!el) return;
+    const tween = gsap.from(el, { opacity: 0, duration: 0.25, ease: "power2.out" });
+    return () => {
+      tween.revert();
+    };
+  }, [bulletImage, bulletVideo]);
+
   if (slide.layout === "cover") {
     return (
       <div className="slide slide--cover">
@@ -48,7 +177,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
 
   if (hasImages && !hasText && !imagesRight) {
     return (
-      <div className={`slide slide--${slide.layout}`}>
+      <div className={`slide slide--${slide.layout}`} ref={rootRef}>
         <MountainBackdrop />
         {part && <div className="slide__part">{part}</div>}
         <div className="slide__images slide__images--fill">
@@ -65,9 +194,28 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     );
   }
 
+  let visibleBullets =
+    slide.layout === "body" && slide.bullets && reveal
+      ? slide.bullets.slice(0, step)
+      : slide.bullets;
+  if (swapped && slide.flashback?.lastBullet && visibleBullets?.length) {
+    const lastIdx = visibleBullets.length - 1;
+    visibleBullets = visibleBullets.map((b, i) =>
+      i === lastIdx ? slide.flashback!.lastBullet! : b
+    );
+  }
+  const showEmphasize = !!slide.emphasize && (!reveal || step >= bulletCount);
+  const slideHasBulletMedia = !!slide.bullets?.some(
+    (b) => typeof b !== "string" && (!!b.image || !!b.video)
+  );
+
   const videoRight = !!slide.video && slide.videoPosition === "right";
   const imageRight = !!slide.image && slide.imagePosition === "right";
-  const hasRight = videoRight || imageRight || imagesRight;
+  const hasRight =
+    videoRight || imageRight || imagesRight || slideHasBulletMedia || !!slide.flashback;
+
+  const displayTitle =
+    swapped && slide.flashback ? slide.flashback.title : slide.title;
 
   const videoLoop = slide.videoMode === "loop";
   const videoEl = slide.video && (
@@ -91,27 +239,24 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     />
   );
 
-  const badgeMatch = slide.title?.match(/^([A-Za-z]+\s+\d+)\.\s+(.+)$/);
-
-  const visibleBullets =
-    slide.bullets && slide.revealFrom != null
-      ? slide.bullets.slice(
-          0,
-          Math.min(slide.bullets.length, slide.revealFrom + step)
-        )
-      : slide.bullets;
+  const badgeMatch = displayTitle?.match(/^([A-Za-z]+\s+\d+)\.\s+(.+)$/);
+  const splitTitle = slide.layout === "body";
 
   const text = (
     <>
       {slide.eyebrow && <div className="eyebrow">{slide.eyebrow}</div>}
-      {slide.title &&
+      {displayTitle &&
         (badgeMatch ? (
           <div className="slide__heading">
             <span className="slide__badge">{badgeMatch[1]}</span>
-            <h1 className="slide__title">{badgeMatch[2]}</h1>
+            <h1 className="slide__title" aria-label={badgeMatch[2]}>
+              {splitTitle ? <SplitChars text={badgeMatch[2]} /> : badgeMatch[2]}
+            </h1>
           </div>
         ) : (
-          <h1 className="slide__title">{slide.title}</h1>
+          <h1 className="slide__title" aria-label={displayTitle}>
+            {splitTitle ? <SplitChars text={displayTitle} /> : displayTitle}
+          </h1>
         ))}
       {slide.subtitle && <p className="slide__sub">{slide.subtitle}</p>}
       {slide.body && <p className="slide__body">{slide.body}</p>}
@@ -119,7 +264,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
       {visibleBullets && (
         <BulletList items={visibleBullets} style={slide.bulletStyle ?? "dash"} />
       )}
-      {slide.emphasize && (
+      {showEmphasize && (
         <p className="slide__emphasize">→ {slide.emphasize}</p>
       )}
       {!imageRight && imageEl}
@@ -134,8 +279,11 @@ export function SlideView({ slide, part, step = 0 }: Props) {
   );
 
   return (
-    <div className={`slide slide--${slide.layout}`}>
+    <div className={`slide slide--${slide.layout}`} ref={rootRef}>
       <MountainBackdrop />
+      {slide.flashback && (
+        <div className="slide__flashback-veil" aria-hidden="true" />
+      )}
       {part && <div className="slide__part">{part}</div>}
       {hasRight ? (
         <div className="slide__content slide__content--row">
@@ -143,6 +291,16 @@ export function SlideView({ slide, part, step = 0 }: Props) {
           <div className="slide__media-col">
             {videoRight && videoEl}
             {imageRight && imageEl}
+            {swapped && slide.flashback && (
+              <video
+                key={slide.flashback.video}
+                src={slide.flashback.video}
+                className="slide__images-stack slide__flashback-video"
+                controls
+                preload="metadata"
+                playsInline
+              />
+            )}
             {imagesRight &&
               effectiveImages!.map((src, i) => (
                 <img
@@ -152,6 +310,26 @@ export function SlideView({ slide, part, step = 0 }: Props) {
                   className="slide__images-stack"
                 />
               ))}
+            {bulletVideo ? (
+              <video
+                key={bulletVideo}
+                src={bulletVideo}
+                className="slide__images-stack slide__bullet-media"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              bulletImage && (
+                <img
+                  key={bulletImage}
+                  src={bulletImage}
+                  alt=""
+                  className="slide__images-stack slide__bullet-media"
+                />
+              )
+            )}
           </div>
         </div>
       ) : (

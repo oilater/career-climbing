@@ -330,6 +330,16 @@ kbd {
   max-height: 65vh;
 }
 
+/* Flashback transition veil (slide fades to black, then into a memory) */
+.slide__flashback-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  background: #000;
+}
+
 /* ============================== Section divider (full screen) ============================== */
 .slide--section {
   padding: 0 9vw;
@@ -487,85 +497,13 @@ kbd {
 }
 
 /* ============================== Polish: body & section ============================== */
-@keyframes ce-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+/* Body-slide entrances are driven by GSAP (see SlideView). Section (Part)
+   dividers have no entrance animation. */
 
-@keyframes ce-rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Container only fades, so children can stagger-rise cleanly on top.
-   Section (Part) dividers stay still — no entrance animation. */
-.slide--body .slide__content {
-  animation: ce-fade 0.4s ease both;
-}
-
-/* Each piece rises in sequence — body slides only */
-.slide--body .slide__content:not(.slide__content--row)::before,
-.slide--body .slide__text::before,
-.slide--body .eyebrow,
-.slide--body .slide__badge,
-.slide--body .slide__title,
-.slide--body .slide__sub,
-.slide--body .slide__body,
-.slide--body .slide__emphasize,
-.slide--body .slide__media-col,
-.slide--body .bullet {
-  animation: ce-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.slide--body .slide__badge {
-  animation-delay: 0.04s;
-}
-.slide--body .slide__title {
-  animation-delay: 0.08s;
-}
-.slide--body .slide__sub,
-.slide--body .slide__body {
-  animation-delay: 0.14s;
-}
-.slide--body .slide__media-col {
-  animation-delay: 0.16s;
-}
-
-.slide--body .bullet:nth-child(1) {
-  animation-delay: 0.18s;
-}
-.slide--body .bullet:nth-child(2) {
-  animation-delay: 0.25s;
-}
-.slide--body .bullet:nth-child(3) {
-  animation-delay: 0.32s;
-}
-.slide--body .bullet:nth-child(4) {
-  animation-delay: 0.39s;
-}
-.slide--body .bullet:nth-child(5) {
-  animation-delay: 0.46s;
-}
-.slide--body .bullet:nth-child(6) {
-  animation-delay: 0.53s;
-}
-.slide--body .bullet:nth-child(7) {
-  animation-delay: 0.6s;
-}
-
-/* Nested bullets ride with their parent, no extra delay */
-.slide--body .bullets--depth-1 .bullet {
-  animation: none;
+/* Split title: each character animates individually */
+.ce-char {
+  display: inline-block;
+  white-space: pre;
 }
 
 /* Accent bar at the top-left of every body slide */
@@ -616,27 +554,6 @@ kbd {
   border-radius: 999px;
   background: linear-gradient(90deg, #34d399, #10b981);
   margin-top: 4px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .slide--body .slide__content,
-  .slide--section .slide__content,
-  .slide--body .slide__content::before,
-  .slide--body .slide__text::before,
-  .slide--body .eyebrow,
-  .slide--body .slide__badge,
-  .slide--body .slide__title,
-  .slide--body .slide__sub,
-  .slide--body .slide__body,
-  .slide--body .slide__emphasize,
-  .slide--body .slide__media-col,
-  .slide--body .bullet,
-  .slide--section .eyebrow,
-  .slide--section .slide__title,
-  .slide--section .slide__sub,
-  .slide--section .slide__content::after {
-    animation: none !important;
-  }
 }
 
 /* ============================== Responsive ============================== */
