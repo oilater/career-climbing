@@ -73,15 +73,34 @@ export function SlideView({ slide, part, step = 0 }: Props) {
       return;
     }
     const veil = root?.querySelector<HTMLElement>(".slide__flashback-veil");
+    const content = root?.querySelector<HTMLElement>(".slide__content");
     if (!veil || prefersReducedMotion()) {
       setSwapped(true);
       return;
     }
     const tl = gsap.timeline();
-    tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power1.in" })
-      .add(() => setSwapped(true))
-      .to({}, { duration: 0.8 })
-      .to(veil, { opacity: 0, duration: 1.1, ease: "power1.out" });
+    tl.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.85, ease: "power3.in" }, 0);
+    if (content) {
+      tl.fromTo(
+        content,
+        { filter: "blur(0px)", scale: 1 },
+        { filter: "blur(7px)", scale: 1.012, duration: 0.85, ease: "power3.in" },
+        0
+      );
+    }
+    tl.add(() => setSwapped(true));
+    if (content) tl.set(content, { filter: "blur(7px)", scale: 1.009 });
+    tl.to({}, { duration: 0.3 }).to(veil, {
+      opacity: 0,
+      duration: 0.95,
+      ease: "expo.out",
+    });
+    if (content)
+      tl.to(
+        content,
+        { filter: "blur(0px)", scale: 1, duration: 1.1, ease: "expo.out" },
+        "<"
+      );
     return () => {
       tl.revert();
     };
@@ -239,7 +258,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     />
   );
 
-  const badgeMatch = displayTitle?.match(/^([A-Za-z]+\s+\d+)\.\s+(.+)$/);
+  const badgeMatch = displayTitle?.match(/^([A-Za-z]+(?:\s+\d+)?)\.\s+(.+)$/);
   const splitTitle = slide.layout === "body";
 
   const text = (

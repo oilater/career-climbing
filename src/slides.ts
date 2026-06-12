@@ -110,22 +110,13 @@ export const slides: Slide[] = [
     },
   },
   {
-    id: "steps",
-    layout: "body",
-    title: "Plan 1. 자기객관화",
-    bullets: [
-      "솔직히 회사 가면 잘 할 수 있는데",
-      "내가 뭔가를 알고 있다는 생각을 버리자",
-    ],
-  },
-  {
     id: "jazz-lesson",
     layout: "body",
-    title: "당시에 느낀 것",
+    title: "Idea. 당시에 느낀 것",
     bullets: [
-      "절대적인 양이 필요하다",
-      "큰 문제를 잘게 쪼개자",
-      "잘 치는 사람을 무작정 따라했더니 길을 잃는다",
+      "큰 문제는 잘게 쪼개자",
+      "생각치 못한 곳에서 답을 찾을 수 있다",
+      "잘 치는 사람을 무작정 따라하면 길을 잃는다",
       {
         text: "성장은 계단식이다. 조급하지 말자",
         children: [
@@ -134,35 +125,45 @@ export const slides: Slide[] = [
       },
     ],
   },
-
   {
-    id: "apply",
+    id: "steps",
     layout: "body",
-    title: "Action 1. 지원 많이 하기",
+    title: "Action 1. 자기객관화",
     bullets: [
-      "서류 100개 넣으면 다 떨어진다? - 이력서 문제",
-      "과제와 면접 떨어진다? - 어떤 걸 공부해야 할 지 명확해짐",
+      "솔직히 회사 가면 잘 할 수 있는데",
+      "내가 뭔가를 알고 있다는 생각을 버리자",
     ],
+    revealAll: true,
   },
 
   {
     id: "apply",
     layout: "body",
-    title: "Action 2. 다른 사람들 만나기",
+    title: "Action 2. 지원 많이 하기",
+    bullets: [
+      "서류 100개 넣으면 다 떨어진다? - 이력서 문제",
+      "과제와 면접에 떨어진다? - 어떤 걸 공부해야 할 지 명확해짐",
+    ],
+    revealAll: true,
+  },
+
+  {
+    id: "apply",
+    layout: "body",
+    title: "Action 3. 다른 사람들 만나기",
     bullets: [
       "실음과 학생들과의 재즈 앙상블",
       "너는 전혀 스윙하고 있지 않아",
       "링크드인, 테오콘, 함수랑산악회 등 네트워킹",
     ],
+    revealAll: true,
   },
-
   {
     id: "part-2",
     layout: "section",
     eyebrow: "Part 2.",
     title: "시야 넓히기",
   },
-
   {
     id: "quit-series",
     layout: "body",
