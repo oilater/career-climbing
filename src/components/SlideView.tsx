@@ -124,6 +124,15 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     if (!root || slide.layout !== "body" || step === 0 || flashed || prefersReducedMotion())
       return;
 
+    // When the step only advances media within the same bullet, leave the
+    // text line alone — only the side media should swap.
+    const revealed = Math.min(plan.length, step);
+    if (
+      revealed >= 2 &&
+      plan[revealed - 1].bulletIndex === plan[revealed - 2].bulletIndex
+    )
+      return;
+
     const bullets = Array.from(
       root.querySelectorAll<HTMLElement>(".bullets > .bullet")
     );

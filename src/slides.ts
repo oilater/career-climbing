@@ -91,7 +91,7 @@ export const slides: Slide[] = [
     bullets: [
       "SSAFY 때 퍼블리싱은 잘했음",
       "3번의 수상 (전공반 최우수상, 2학기 우수상 2번)",
-      "근데 이력서에 쓸 게 아무것도 없다",
+      { text: "근데 이력서에 쓸 게 아무것도 없다", image: "/images/resume.jpg" },
     ],
   },
   {
