@@ -18,8 +18,13 @@ function stepsFor(i: number): number {
   const s = slides[i];
   if (!s) return 1;
   if (s.imagesMode === "step" && s.images) return s.images.length;
-  if (s.layout === "body" && !s.revealAll)
-    return (s.bullets?.length ?? 0) + 1 + (s.flashback ? 1 : 0);
+  if (s.layout === "body" && !s.revealAll) {
+    let units = 0;
+    for (const b of s.bullets ?? []) {
+      units += typeof b !== "string" && b.media?.length ? b.media.length : 1;
+    }
+    return units + 1 + (s.flashback ? 1 : 0);
+  }
   return 1;
 }
 
@@ -101,7 +106,12 @@ export default function App() {
       if (s.image) urls.add(s.image);
       s.images?.forEach((u) => urls.add(u));
       s.bullets?.forEach((b) => {
-        if (typeof b !== "string" && b.image) urls.add(b.image);
+        if (typeof b !== "string") {
+          if (b.image) urls.add(b.image);
+          b.media?.forEach((u) => {
+            if (!/\.(webm|mp4|mov|m4v)$/i.test(u)) urls.add(u);
+          });
+        }
       });
     }
     urls.forEach((u) => {

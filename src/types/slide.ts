@@ -8,6 +8,7 @@ export type Bullet =
       hint?: string;
       image?: string;
       video?: string;
+      media?: string[];
     };
 
 export interface Slide {

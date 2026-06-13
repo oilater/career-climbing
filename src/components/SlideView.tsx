@@ -29,11 +29,24 @@ const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const isVideoUrl = (u: string) => /\.(webm|mp4|mov|m4v)$/i.test(u);
+
 export function SlideView({ slide, part, step = 0 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const reveal = !slide.revealAll;
-  const bulletCount = slide.bullets?.length ?? 0;
-  const flashed = !!slide.flashback && reveal && step > bulletCount;
+
+  // Each bullet reveals in one step, except a bullet with a `media` array,
+  // which reveals its media one item per step (space advances within it).
+  const plan: { bulletIndex: number; mediaIndex: number }[] = [];
+  slide.bullets?.forEach((b, bi) => {
+    if (typeof b !== "string" && b.media?.length) {
+      b.media.forEach((_, mi) => plan.push({ bulletIndex: bi, mediaIndex: mi }));
+    } else {
+      plan.push({ bulletIndex: bi, mediaIndex: -1 });
+    }
+  });
+  const revealUnitCount = plan.length;
+  const flashed = !!slide.flashback && reveal && step > revealUnitCount;
   const [swapped, setSwapped] = useState(false);
 
   useLayoutEffect(() => {
@@ -134,14 +147,39 @@ export function SlideView({ slide, part, step = 0 }: Props) {
   let bulletImage: string | undefined;
   let bulletVideo: string | undefined;
   if (slide.layout === "body" && slide.bullets) {
-    const upTo = reveal ? Math.min(slide.bullets.length, step) : slide.bullets.length;
-    for (let i = upTo - 1; i >= 0; i--) {
-      const b = slide.bullets[i];
-      if (typeof b !== "string" && (b.image || b.video)) {
-        bulletImage = b.image;
-        bulletVideo = b.video;
-        break;
+    let url: string | undefined;
+    if (reveal) {
+      const revealed = Math.min(plan.length, step);
+      for (let k = revealed - 1; k >= 0; k--) {
+        const { bulletIndex, mediaIndex } = plan[k];
+        const b = slide.bullets[bulletIndex];
+        if (typeof b === "string") continue;
+        if (mediaIndex >= 0 && b.media) {
+          url = b.media[mediaIndex];
+          break;
+        }
+        if (b.image || b.video) {
+          url = b.image ?? b.video;
+          break;
+        }
       }
+    } else {
+      for (let i = slide.bullets.length - 1; i >= 0; i--) {
+        const b = slide.bullets[i];
+        if (typeof b === "string") continue;
+        if (b.media?.length) {
+          url = b.media[b.media.length - 1];
+          break;
+        }
+        if (b.image || b.video) {
+          url = b.image ?? b.video;
+          break;
+        }
+      }
+    }
+    if (url) {
+      if (isVideoUrl(url)) bulletVideo = url;
+      else bulletImage = url;
     }
   }
   useLayoutEffect(() => {
@@ -213,19 +251,21 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     );
   }
 
-  let visibleBullets =
-    slide.layout === "body" && slide.bullets && reveal
-      ? slide.bullets.slice(0, step)
-      : slide.bullets;
+  let visibleBullets = slide.bullets;
+  if (slide.layout === "body" && slide.bullets && reveal) {
+    const revealed = Math.min(plan.length, step);
+    const count = revealed === 0 ? 0 : plan[revealed - 1].bulletIndex + 1;
+    visibleBullets = slide.bullets.slice(0, count);
+  }
   if (swapped && slide.flashback?.lastBullet && visibleBullets?.length) {
     const lastIdx = visibleBullets.length - 1;
     visibleBullets = visibleBullets.map((b, i) =>
       i === lastIdx ? slide.flashback!.lastBullet! : b
     );
   }
-  const showEmphasize = !!slide.emphasize && (!reveal || step >= bulletCount);
+  const showEmphasize = !!slide.emphasize && (!reveal || step >= revealUnitCount);
   const slideHasBulletMedia = !!slide.bullets?.some(
-    (b) => typeof b !== "string" && (!!b.image || !!b.video)
+    (b) => typeof b !== "string" && (!!b.image || !!b.video || !!b.media?.length)
   );
 
   const videoRight = !!slide.video && slide.videoPosition === "right";

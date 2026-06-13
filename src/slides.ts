@@ -59,7 +59,7 @@ export const slides: Slide[] = [
     layout: "body",
     title: "첫 회사",
     bullets: [
-      { text: "Unity로 운동 앱 개발", image: "/images/goose1.jpg" },
+      { text: "Unity로 운동 앱 개발", media: ["/images/goose1.jpg", "/videos/avatar-move.gif"] },
       { text: "넌 못 지나간다", video: "/videos/run-to-merge.webm" },
       { text: "밀착 코드 리뷰, 협업하는 방법", image: "/images/code-review.webp" },
       { text: "서비스 종료", image: "/images/broke-up.webp" },
