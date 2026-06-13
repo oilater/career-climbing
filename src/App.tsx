@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SlideView } from "./components/SlideView";
+import { PresenterView } from "./components/PresenterView";
 import { useKeyboardNav } from "./hooks/useKeyboardNav";
 import { slides } from "./slides";
+
+type DeckMessage =
+  | { type: "state"; index: number; step: number }
+  | { type: "nav"; action: "next" | "prev" | "first" | "last" }
+  | { type: "request" };
+
+const CHANNEL = "career-deck";
 
 function computePartLabels(): (string | undefined)[] {
   let current: string | undefined;
@@ -29,6 +37,15 @@ function stepsFor(i: number): number {
 }
 
 export default function App() {
+  const isPresenter = useMemo(
+    () => new URLSearchParams(window.location.search).has("presenter"),
+    []
+  );
+  if (isPresenter) return <PresenterView channel={CHANNEL} />;
+  return <Viewer />;
+}
+
+function Viewer() {
   const [index, setIndex] = useState(() => {
     const hash = parseInt(window.location.hash.replace("#", ""), 10);
     return Number.isFinite(hash) && hash > 0
@@ -99,6 +116,46 @@ export default function App() {
     onLast: last,
     onTogglePresent: toggleFullscreen,
   });
+
+  // Sync with a presenter window over BroadcastChannel.
+  const channelRef = useRef<BroadcastChannel | null>(null);
+  const navRef = useRef({ next, prev, first, last });
+  navRef.current = { next, prev, first, last };
+  const stateRef = useRef({ index, step });
+  stateRef.current = { index, step };
+
+  useEffect(() => {
+    const ch = new BroadcastChannel(CHANNEL);
+    channelRef.current = ch;
+    ch.onmessage = (e: MessageEvent<DeckMessage>) => {
+      const m = e.data;
+      if (m.type === "nav") navRef.current[m.action]();
+      else if (m.type === "request")
+        ch.postMessage({ type: "state", ...stateRef.current });
+    };
+    return () => {
+      ch.close();
+      channelRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    channelRef.current?.postMessage({ type: "state", index, step });
+  }, [index, step]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.key === "p" || e.key === "P") && !e.metaKey && !e.ctrlKey) {
+        window.open(
+          `${window.location.pathname}?presenter`,
+          "presenter",
+          "width=900,height=680"
+        );
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     const urls = new Set<string>();

@@ -9,6 +9,7 @@ export type Bullet =
       image?: string;
       video?: string;
       media?: string[];
+      clearMedia?: boolean;
     };
 
 export interface Slide {
@@ -22,6 +23,7 @@ export interface Slide {
   bulletStyle?: "dash" | "number";
   revealAll?: boolean;
   emphasize?: string;
+  notes?: string;
   video?: string;
   videoPosition?: "center" | "right";
   videoMode?: "controls" | "loop";
@@ -30,5 +32,6 @@ export interface Slide {
   images?: string[];
   imagesPosition?: "bottom" | "right";
   imagesMode?: "all" | "step";
+  imagesLarge?: boolean;
   flashback?: { title: string; video: string; lastBullet?: string };
 }

@@ -60,11 +60,6 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     };
 
     add(q(".eyebrow, .slide__badge"), { opacity: 0, y: 6, duration: 0.5 }, 0);
-    add(
-      q(".ce-char"),
-      { opacity: 0, duration: 0.6, stagger: { amount: 0.14 }, ease: "sine.out" },
-      0.1
-    );
     add(q(".slide__sub, .slide__body, .slide__emphasize"), { opacity: 0, y: 6, duration: 0.5 }, 0.2);
     add(q(".slide__media-col, .slide__images--fill"), { opacity: 0, y: 8, duration: 0.55 }, 0.15);
     add(
@@ -163,6 +158,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
         const { bulletIndex, mediaIndex } = plan[k];
         const b = slide.bullets[bulletIndex];
         if (typeof b === "string") continue;
+        if (k === revealed - 1 && b.clearMedia) break;
         if (mediaIndex >= 0 && b.media) {
           url = b.media[mediaIndex];
           break;
@@ -243,7 +239,12 @@ export function SlideView({ slide, part, step = 0 }: Props) {
 
   if (hasImages && !hasText && !imagesRight) {
     return (
-      <div className={`slide slide--${slide.layout}`} ref={rootRef}>
+      <div
+        className={`slide slide--${slide.layout}${
+          slide.imagesLarge ? " slide--media-fill" : ""
+        }`}
+        ref={rootRef}
+      >
         <MountainBackdrop />
         {part && <div className="slide__part">{part}</div>}
         <div className="slide__images slide__images--fill">
@@ -350,7 +351,12 @@ export function SlideView({ slide, part, step = 0 }: Props) {
   );
 
   return (
-    <div className={`slide slide--${slide.layout}`} ref={rootRef}>
+    <div
+      className={`slide slide--${slide.layout}${
+        slide.imagesLarge ? " slide--media-lg" : ""
+      }`}
+      ref={rootRef}
+    >
       <MountainBackdrop />
       {slide.flashback && (
         <div className="slide__flashback-veil" aria-hidden="true" />
@@ -359,7 +365,11 @@ export function SlideView({ slide, part, step = 0 }: Props) {
       {hasRight ? (
         <div className="slide__content slide__content--row">
           <div className="slide__text">{text}</div>
-          <div className="slide__media-col">
+          <div
+            className={`slide__media-col${
+              slide.imagesLarge ? " slide__media-col--wide" : ""
+            }`}
+          >
             {videoRight && videoEl}
             {imageRight && imageEl}
             {swapped && slide.flashback && (
