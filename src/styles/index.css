@@ -537,6 +537,14 @@ kbd {
   letter-spacing: 0.03em;
 }
 
+.slide__badge--problem {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+}
+
+.slide__badge--solution {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
 /* Section divider refinements */
 .slide--section .eyebrow {
   display: inline-block;

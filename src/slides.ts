@@ -114,32 +114,42 @@ export const slides: Slide[] = [
     layout: "body",
     title: "Idea. 당시에 느낀 것",
     bullets: [
-      "큰 문제는 잘게 쪼개자",
-      "생각치 못한 곳에서 답을 찾을 수 있다",
       "잘 치는 사람을 무작정 따라하면 길을 잃는다",
+      "큰 문제는 잘게 쪼개자",
+      "답은 생각치 못한 곳에 있을수도",
       {
         text: "성장은 계단식이다. 조급하지 말자",
-        children: [
-          "꾸준히 느는 게 아니라, 자고 일어나면 확 늘어있더라",
-        ],
       },
+    ],
+  },
+  {
+    id: "idea-1",
+    layout: "body",
+    title: "Problem. 잘 치는 사람을 무작정 따라하면 길을 잃는다",
+    bullets: [
+      "나도 이렇게 잘 치고 싶다",
+      "별로 의미 없는 시간",
     ],
   },
   {
     id: "steps",
     layout: "body",
-    title: "Action 1. 자기객관화",
+    title: "Solution 1. 자기객관화",
     bullets: [
-      "솔직히 회사 가면 잘 할 수 있는데",
-      "내가 뭔가를 알고 있다는 생각을 버리자",
+      "나에게 솔직하기",
+      "단계별 성장을 즐기자",
     ],
-    revealAll: true,
   },
 
   {
+    id: "idea-2",
+    layout: "body",
+    title: "Idea. 큰 문제는 잘게 쪼개자",
+  },
+  {
     id: "apply",
     layout: "body",
-    title: "Action 2. 지원 많이 하기",
+    title: "Solution 2. 지원 많이 하기",
     bullets: [
       "서류 100개 넣으면 다 떨어진다? - 이력서 문제",
       "과제와 면접에 떨어진다? - 어떤 걸 공부해야 할 지 명확해짐",
@@ -150,7 +160,7 @@ export const slides: Slide[] = [
   {
     id: "apply",
     layout: "body",
-    title: "Action 3. 다른 사람들 만나기",
+    title: "Solution 3. 다른 사람들 만나기",
     bullets: [
       "실음과 학생들과의 재즈 앙상블",
       "너는 전혀 스윙하고 있지 않아",
@@ -244,6 +254,7 @@ export const slides: Slide[] = [
       "열심히 공부할수록 빨리 더 나은 곳에 가고 싶었음",
       "커리어는 걱정되지만 1년은 못 다니겠다",
     ],
+    revealAll: true,
   },
 
   {
@@ -299,6 +310,7 @@ export const slides: Slide[] = [
       "일찍 자고, 일찍 출근하기",
       "회사에 뭐가 도움이 될까?",
     ],
+    revealAll: true,
   },
 
   {
@@ -328,7 +340,6 @@ export const slides: Slide[] = [
     layout: "body",
     title: "마치며",
     bullets: [
-      "긴장을 해소할 때 좋다고 느낀다", 
       "한 번 치면 이상한 음, 두 번 치면 재즈",
       "커리어의 오점 덮기, 버티기"
     ],

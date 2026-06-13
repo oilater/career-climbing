@@ -259,6 +259,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
   );
 
   const badgeMatch = displayTitle?.match(/^([A-Za-z]+(?:\s+\d+)?)\.\s+(.+)$/);
+  const badgeKind = badgeMatch ? badgeMatch[1].split(/\s+/)[0].toLowerCase() : "";
   const splitTitle = slide.layout === "body";
 
   const text = (
@@ -267,7 +268,9 @@ export function SlideView({ slide, part, step = 0 }: Props) {
       {displayTitle &&
         (badgeMatch ? (
           <div className="slide__heading">
-            <span className="slide__badge">{badgeMatch[1]}</span>
+            <span className={`slide__badge slide__badge--${badgeKind}`}>
+              {badgeMatch[1]}
+            </span>
             <h1 className="slide__title" aria-label={badgeMatch[2]}>
               {splitTitle ? <SplitChars text={badgeMatch[2]} /> : badgeMatch[2]}
             </h1>
