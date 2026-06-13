@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SlideView } from "./components/SlideView";
 import { useKeyboardNav } from "./hooks/useKeyboardNav";
 import { slides } from "./slides";
@@ -62,6 +62,23 @@ export default function App() {
     setStep(0);
   }, []);
 
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    touchStart.current = null;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) next();
+    else prev();
+  };
+
   const toggleFullscreen = useCallback(() => {
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => undefined);
@@ -107,7 +124,12 @@ export default function App() {
   if (!slide) return null;
 
   return (
-    <div className="viewer" onMouseMove={() => setShowHud(true)}>
+    <div
+      className="viewer"
+      onMouseMove={() => setShowHud(true)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <SlideView
         key={`${slide.layout}:${slide.title ?? index}`}
         slide={slide}

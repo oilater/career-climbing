@@ -344,7 +344,16 @@ export const slides: Slide[] = [
       "커리어의 오점 덮기, 버티기"
     ],
   },
-
+  {
+    id: "outro-end",
+    layout: "section",
+    title: "기대된다",
+  },
+    {
+    id: "qna",
+    layout: "section",
+    title: "Q&A",
+  },
   {
     id: "thanks",
     layout: "closing",
