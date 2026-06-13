@@ -345,6 +345,7 @@ export const slides: Slide[] = [
     layout: "body",
     title: "마치며",
     bullets: [
+      "화면을 넘어보자",
       "한 번 치면 이상한 음, 두 번 치면 재즈",
       "커리어의 오점 덮기, 버티기"
     ],
