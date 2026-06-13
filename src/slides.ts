@@ -137,14 +137,19 @@ export const slides: Slide[] = [
     title: "Solution 1. 자기객관화",
     bullets: [
       "나에게 솔직하기",
-      "단계별 성장을 즐기자",
+      "회사 가면 나도 잘할 수 있는데?",
     ],
   },
 
   {
     id: "idea-2",
     layout: "body",
-    title: "Idea. 큰 문제는 잘게 쪼개자",
+    title: "Problem. 문제가 너무 크다",
+    bullets: [
+      { text: "고민이 너무 추상적이야", image: "/images/resume.jpg" },
+      "뭉뚱그려서 생각하게 됨",
+    ],
+    revealAll: true,
   },
   {
     id: "apply",
