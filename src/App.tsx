@@ -79,6 +79,21 @@ export default function App() {
   });
 
   useEffect(() => {
+    const urls = new Set<string>();
+    for (const s of slides) {
+      if (s.image) urls.add(s.image);
+      s.images?.forEach((u) => urls.add(u));
+      s.bullets?.forEach((b) => {
+        if (typeof b !== "string" && b.image) urls.add(b.image);
+      });
+    }
+    urls.forEach((u) => {
+      const img = new Image();
+      img.src = u;
+    });
+  }, []);
+
+  useEffect(() => {
     window.location.hash = String(index + 1);
   }, [index]);
 
