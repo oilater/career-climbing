@@ -222,6 +222,14 @@ export const slides: Slide[] = [
     imagesMode: "step",
     imagesLarge: true,
   },
+  
+  {
+    id: "steps",
+    layout: "body",
+    notes: "베타리딩 후기/리뷰.",
+    images: ["/images/book-review.webp"],
+    imagesLarge: true,
+  },
   {
     id: "steps",
     layout: "body",
@@ -230,15 +238,6 @@ export const slides: Slide[] = [
     imagesMode: "step",
     imagesLarge: true,
   },
-
-  {
-    id: "steps",
-    layout: "body",
-    notes: "베타리딩 후기/리뷰.",
-    images: ["/images/book-review.webp"],
-    imagesLarge: true,
-  },
-
 
   {
     id: "company-1",
