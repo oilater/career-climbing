@@ -222,6 +222,14 @@ export const slides: Slide[] = [
     imagesMode: "step",
     imagesLarge: true,
   },
+  {
+    id: "steps",
+    layout: "body",
+    notes: "디벨로퍼스",
+    images: ["/images/kakao.webp"],
+    imagesMode: "step",
+    imagesLarge: true,
+  },
 
   {
     id: "steps",
