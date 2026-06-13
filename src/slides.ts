@@ -238,6 +238,14 @@ export const slides: Slide[] = [
     imagesMode: "step",
     imagesLarge: true,
   },
+  {
+    id: "steps",
+    layout: "body",
+    notes: "번들",
+    images: ["/images/bundle.webp"],
+    imagesMode: "step",
+    imagesLarge: true,
+  },
 
   {
     id: "company-1",
