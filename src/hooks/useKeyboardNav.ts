@@ -6,7 +6,6 @@ interface KeyboardNavOptions {
   onFirst?: () => void;
   onLast?: () => void;
   onTogglePresent?: () => void;
-  enabled?: boolean;
 }
 
 export function useKeyboardNav({
@@ -15,12 +14,9 @@ export function useKeyboardNav({
   onFirst,
   onLast,
   onTogglePresent,
-  enabled = true,
 }: KeyboardNavOptions) {
   useEffect(
     function bindKeyboardNav() {
-      if (!enabled) return;
-
       const handleKeydown = (e: KeyboardEvent) => {
         const target = e.target as HTMLElement | null;
         if (
@@ -71,6 +67,6 @@ export function useKeyboardNav({
       window.addEventListener("keydown", handleKeydown);
       return () => window.removeEventListener("keydown", handleKeydown);
     },
-    [onNext, onPrev, onFirst, onLast, onTogglePresent, enabled],
+    [onNext, onPrev, onFirst, onLast, onTogglePresent],
   );
 }

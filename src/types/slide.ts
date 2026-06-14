@@ -5,7 +5,6 @@ export type Bullet =
   | {
       text: string;
       children?: Bullet[];
-      hint?: string;
       image?: string;
       video?: string;
       media?: string[];
@@ -22,7 +21,6 @@ export interface Slide {
   bulletStyle?: "dash" | "number";
   revealAll?: boolean;
   emphasize?: string;
-  notes?: string;
   video?: string;
   videoPosition?: "center" | "right";
   videoMode?: "controls" | "loop";

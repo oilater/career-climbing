@@ -96,16 +96,20 @@ export function useSlideAnimations({
         setSwapped(true);
         return;
       }
+      let cancelled = false;
       const tl = gsap.timeline();
       tl.fromTo(veil, { opacity: 0 }, { ...FLASHBACK.veilIn }, 0);
       if (content) {
         tl.fromTo(content, { filter: "blur(0px)", scale: 1 }, { ...FLASHBACK.contentBlur }, 0);
       }
-      tl.add(() => setSwapped(true));
+      tl.add(() => {
+        if (!cancelled) setSwapped(true);
+      });
       if (content) tl.set(content, { ...FLASHBACK.contentHeld });
       tl.to({}, { duration: FLASHBACK.hold }).to(veil, { ...FLASHBACK.veilOut });
       if (content) tl.to(content, { ...FLASHBACK.contentRestore }, "<");
       return () => {
+        cancelled = true;
         tl.revert();
       };
     },

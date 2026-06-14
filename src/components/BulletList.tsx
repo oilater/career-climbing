@@ -21,7 +21,6 @@ export function BulletList({ items, style, depth = 0 }: Props) {
         return (
           <li key={i} className="bullet">
             <span>{item.text}</span>
-            {item.hint && <span className="bullet__hint"> — {item.hint}</span>}
             {item.children && <BulletList items={item.children} style="dash" depth={depth + 1} />}
           </li>
         );

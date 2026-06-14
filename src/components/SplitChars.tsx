@@ -6,7 +6,7 @@ export function SplitChars({ text }: { text: string }) {
           <br key={i} />
         ) : (
           <span key={i} className="ce-char" aria-hidden="true">
-            {ch === " " ? " " : ch}
+            {ch}
           </span>
         ),
       )}

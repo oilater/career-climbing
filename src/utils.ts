@@ -1,9 +1,11 @@
-export const isVideoUrl = (u: string) => /\.(webm|mp4|mov|m4v)$/i.test(u);
+export const isVideoUrl = (u: string) => /\.(webm|mp4|mov|m4v)(\?.*)?$/i.test(u);
 
-export const prefersReducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reducedMotionQuery =
+  typeof window !== "undefined" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
 
-export interface BadgeTitle {
+export const prefersReducedMotion = () => reducedMotionQuery?.matches ?? false;
+
+interface BadgeTitle {
   badge: string;
   rest: string;
 }

@@ -20,6 +20,7 @@ const stepsFor = (i: number) => stepCount(slides[i]);
 
 export default function App() {
   const [index, setIndex] = useState(() => {
+    if (typeof window === "undefined") return 0;
     const hash = parseInt(window.location.hash.replace("#", ""), 10);
     return Number.isFinite(hash) && hash > 0 ? Math.min(hash - 1, slides.length - 1) : 0;
   });

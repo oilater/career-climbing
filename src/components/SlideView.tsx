@@ -60,12 +60,11 @@ export function SlideView({ slide, part, step = 0 }: Props) {
     (slide.bullets && slide.bullets.length > 0) ||
     slide.emphasize
   );
-  const hasImages = !!(slide.images && slide.images.length > 0);
+  const images = slide.images ?? [];
+  const hasImages = images.length > 0;
   const isStepMode = hasImages && slide.imagesMode === "step";
-  const safeStep = isStepMode ? Math.max(0, Math.min(step, slide.images!.length - 1)) : 0;
-  const effectiveImages: string[] | undefined = isStepMode
-    ? [slide.images![safeStep]]
-    : slide.images;
+  const safeStep = isStepMode ? Math.max(0, Math.min(step, images.length - 1)) : 0;
+  const effectiveImages = isStepMode ? [images[safeStep]] : images;
   const imagesRight = hasImages && slide.imagesPosition === "right";
 
   if (hasImages && !hasText && !imagesRight) {
@@ -77,7 +76,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
         <MountainBackdrop />
         {part && <div className="slide__part">{part}</div>}
         <div className="slide__images slide__images--fill">
-          {effectiveImages!.map((src, i) => (
+          {effectiveImages.map((src, i) => (
             <img key={i} src={src} alt="" className="slide__images-item slide__images-item--fill" />
           ))}
         </div>
@@ -159,7 +158,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
       {!imageRight && imageEl}
       {hasImages && !imagesRight && (
         <div className={`slide__images ${isStepMode ? "slide__images--step" : ""}`}>
-          {effectiveImages!.map((src, i) => (
+          {effectiveImages.map((src, i) => (
             <img key={src + i} src={src} alt="" className="slide__images-item" />
           ))}
         </div>
@@ -192,7 +191,7 @@ export function SlideView({ slide, part, step = 0 }: Props) {
               />
             )}
             {imagesRight &&
-              effectiveImages!.map((src, i) => (
+              effectiveImages.map((src, i) => (
                 <img key={src + i} src={src} alt="" className="slide__images-stack" />
               ))}
             {bulletVideo ? (
