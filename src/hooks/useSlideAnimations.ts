@@ -11,6 +11,14 @@ const EASE = {
   step: "power2.out",
 };
 
+export const REVEAL = {
+  badge: "badge",
+  text: "text",
+  media: "media",
+} as const;
+
+const revealSelector = (token: string) => `[data-reveal='${token}']`;
+
 interface EntranceStep {
   selector: string;
   vars: gsap.TweenVars;
@@ -18,17 +26,9 @@ interface EntranceStep {
 }
 
 const ENTRANCE: EntranceStep[] = [
-  { selector: ".eyebrow, .slide__badge", vars: { opacity: 0, y: 6, duration: 0.5 }, at: 0 },
-  {
-    selector: ".slide__sub, .slide__body, .slide__emphasize",
-    vars: { opacity: 0, y: 6, duration: 0.5 },
-    at: 0.2,
-  },
-  {
-    selector: ".slide__media-col, .slide__images--fill",
-    vars: { opacity: 0, y: 8, duration: 0.55 },
-    at: 0.15,
-  },
+  { selector: revealSelector(REVEAL.badge), vars: { opacity: 0, y: 6, duration: 0.5 }, at: 0 },
+  { selector: revealSelector(REVEAL.text), vars: { opacity: 0, y: 6, duration: 0.5 }, at: 0.2 },
+  { selector: revealSelector(REVEAL.media), vars: { opacity: 0, y: 8, duration: 0.55 }, at: 0.15 },
   {
     selector: ".bullets > .bullet",
     vars: { opacity: 0, y: 8, duration: 0.4, stagger: { amount: 0.18 } },
@@ -49,7 +49,7 @@ const STEP_REVEAL: gsap.TweenVars = { opacity: 0, y: 8, duration: 0.3, ease: EAS
 const BULLET_MEDIA: gsap.TweenVars = { opacity: 0, duration: 0.25, ease: EASE.step };
 
 interface Options {
-  rootRef: RefObject<HTMLDivElement>;
+  rootRef: RefObject<HTMLDivElement | null>;
   slide: Slide;
   step: number;
   plan: RevealUnit[];

@@ -304,3 +304,14 @@ export const slides: Slide[] = [
     subtitle: "함바! 👋",
   },
 ];
+
+export const partLabels: (string | undefined)[] = (() => {
+  let current: string | undefined;
+  return slides.map((slide) => {
+    if (slide.layout === "section") {
+      current = slide.title || slide.eyebrow;
+      return undefined;
+    }
+    return slide.layout === "body" ? current : undefined;
+  });
+})();

@@ -1,7 +1,41 @@
-import { Slide } from "./types/slide";
+import { Slide, Bullet } from "./types/slide";
 import { isVideoUrl } from "./utils";
 
 export type RevealUnit = { bulletIndex: number; mediaIndex: number };
+
+export interface VisibleContent {
+  visibleBullets?: Bullet[];
+  showEmphasize: boolean;
+  displayTitle?: string;
+}
+
+export function resolveVisibleContent(
+  slide: Slide,
+  step: number,
+  plan: RevealUnit[],
+  swapped: boolean,
+): VisibleContent {
+  const reveal = !slide.revealAll;
+  const revealUnitCount = plan.length;
+
+  let visibleBullets = slide.bullets;
+  if (slide.layout === "body" && slide.bullets && reveal) {
+    const revealed = Math.min(plan.length, step);
+    const visibleBulletCount = revealed === 0 ? 0 : plan[revealed - 1].bulletIndex + 1;
+    visibleBullets = slide.bullets.slice(0, visibleBulletCount);
+  }
+  if (swapped && slide.flashback?.lastBullet && visibleBullets?.length) {
+    const lastIndex = visibleBullets.length - 1;
+    visibleBullets = visibleBullets.map((bullet, index) =>
+      index === lastIndex ? slide.flashback!.lastBullet! : bullet,
+    );
+  }
+
+  const showEmphasize = !!slide.emphasize && (!reveal || step >= revealUnitCount);
+  const displayTitle = swapped && slide.flashback ? slide.flashback.title : slide.title;
+
+  return { visibleBullets, showEmphasize, displayTitle };
+}
 
 export function revealPlan(slide: Slide): RevealUnit[] {
   const plan: RevealUnit[] = [];

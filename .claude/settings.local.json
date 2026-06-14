@@ -26,7 +26,31 @@
       "Bash(npx oxlint *)",
       "Bash(npx oxfmt *)",
       "Bash(echo \"exit=$?\")",
-      "Bash(echo \"lint exit=$?\")"
+      "Bash(echo \"lint exit=$?\")",
+      "Bash(git *)",
+      "Bash(sed -n '22,26p' /Users/aiden/Documents/career-like-jazz/src/App.tsx)",
+      "Bash(sed -n '77,83p' /Users/aiden/Documents/career-like-jazz/src/App.tsx)",
+      "Bash(sed -n '1,16p' /Users/aiden/Documents/career-like-jazz/src/components/SplitChars.tsx)",
+      "Bash(xxd /Users/aiden/Documents/career-like-jazz/src/components/SplitChars.tsx)",
+      "Bash(command -v ctx7)",
+      "WebSearch",
+      "WebFetch(domain:www.abhs.in)",
+      "Bash(npx next *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(pkill -f \"next-server\")",
+      "Bash(curl -s http://localhost:3137/)",
+      "Bash(python3 -c \"import sys,re; h=sys.stdin.read\\(\\); m=re.search\\(r'<script type=\\\\\"application/ld\\\\+json\\\\\">\\(.*?\\)</script>', h, re.S\\); print\\(m.group\\(1\\) if m else 'NOT FOUND'\\)\")",
+      "Bash(npm config *)",
+      "Read(//Users/aiden/**)",
+      "Bash(pnpm --version)",
+      "Bash(echo \"pnpm version: $\\(pnpm --version\\)\")",
+      "Bash(pnpm install *)",
+      "Bash(pnpm build *)",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm format:check)",
+      "Bash(pnpm format *)",
+      "Read(//private/tmp/**)",
+      "Bash(pnpm remove *)"
     ]
   }
 }
