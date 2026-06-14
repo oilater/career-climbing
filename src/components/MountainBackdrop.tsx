@@ -1,12 +1,5 @@
 export function MountainBackdrop() {
-  return (
-    <img
-      className="mountain-backdrop"
-      src="/images/mountain.png"
-      alt=""
-      aria-hidden
-    />
-  );
+  return <img className="mountain-backdrop" src="/images/mountain.png" alt="" aria-hidden />;
 }
 
 export function MountainLogo({ size = 28 }: { size?: number }) {

@@ -17,55 +17,60 @@ export function useKeyboardNav({
   onTogglePresent,
   enabled = true,
 }: KeyboardNavOptions) {
-  useEffect(() => {
-    if (!enabled) return;
+  useEffect(
+    function bindKeyboardNav() {
+      if (!enabled) return;
 
-    const handler = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
-        return;
-      }
+      const handleKeydown = (e: KeyboardEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (
+          target &&
+          (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
+        ) {
+          return;
+        }
 
-      const isMedia =
-        target && (target.tagName === "VIDEO" || target.tagName === "AUDIO");
+        const isMedia = target && (target.tagName === "VIDEO" || target.tagName === "AUDIO");
 
-      switch (e.key) {
-        case "ArrowRight":
-        case "ArrowDown":
-        case "PageDown":
-          e.preventDefault();
-          onNext();
-          break;
-        case " ":
-          if (isMedia) return;
-          e.preventDefault();
-          onNext();
-          break;
-        case "ArrowLeft":
-        case "ArrowUp":
-        case "PageUp":
-          e.preventDefault();
-          onPrev();
-          break;
-        case "Home":
-          e.preventDefault();
-          onFirst?.();
-          break;
-        case "End":
-          e.preventDefault();
-          onLast?.();
-          break;
-        case "f":
-        case "F":
-          if (onTogglePresent) {
+        switch (e.key) {
+          case "ArrowRight":
+          case "ArrowDown":
+          case "PageDown":
             e.preventDefault();
-            onTogglePresent();
-          }
-          break;
-      }
-    };
+            onNext();
+            break;
+          case " ":
+            if (isMedia) return;
+            e.preventDefault();
+            onNext();
+            break;
+          case "ArrowLeft":
+          case "ArrowUp":
+          case "PageUp":
+            e.preventDefault();
+            onPrev();
+            break;
+          case "Home":
+            e.preventDefault();
+            onFirst?.();
+            break;
+          case "End":
+            e.preventDefault();
+            onLast?.();
+            break;
+          case "f":
+          case "F":
+            if (onTogglePresent) {
+              e.preventDefault();
+              onTogglePresent();
+            }
+            break;
+        }
+      };
 
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onNext, onPrev, onFirst, onLast, onTogglePresent, enabled]);
+      window.addEventListener("keydown", handleKeydown);
+      return () => window.removeEventListener("keydown", handleKeydown);
+    },
+    [onNext, onPrev, onFirst, onLast, onTogglePresent, enabled],
+  );
 }

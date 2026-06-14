@@ -13,7 +13,6 @@ export type Bullet =
     };
 
 export interface Slide {
-  id: string;
   layout: SlideLayout;
   eyebrow?: string;
   title?: string;

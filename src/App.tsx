@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SlideView } from "./components/SlideView";
-import { PresenterView } from "./components/PresenterView";
 import { useKeyboardNav } from "./hooks/useKeyboardNav";
 import { slides } from "./slides";
-
-type DeckMessage =
-  | { type: "state"; index: number; step: number }
-  | { type: "nav"; action: "next" | "prev" | "first" | "last" }
-  | { type: "request" };
-
-const CHANNEL = "career-deck";
+import { stepCount } from "./reveal";
+import { isVideoUrl } from "./utils";
 
 function computePartLabels(): (string | undefined)[] {
   let current: string | undefined;
@@ -22,35 +16,12 @@ function computePartLabels(): (string | undefined)[] {
   });
 }
 
-function stepsFor(i: number): number {
-  const s = slides[i];
-  if (!s) return 1;
-  if (s.imagesMode === "step" && s.images) return s.images.length;
-  if (s.layout === "body" && !s.revealAll) {
-    let units = 0;
-    for (const b of s.bullets ?? []) {
-      units += typeof b !== "string" && b.media?.length ? b.media.length : 1;
-    }
-    return units + 1 + (s.flashback ? 1 : 0);
-  }
-  return 1;
-}
+const stepsFor = (i: number) => stepCount(slides[i]);
 
 export default function App() {
-  const isPresenter = useMemo(
-    () => new URLSearchParams(window.location.search).has("presenter"),
-    []
-  );
-  if (isPresenter) return <PresenterView channel={CHANNEL} />;
-  return <Viewer />;
-}
-
-function Viewer() {
   const [index, setIndex] = useState(() => {
     const hash = parseInt(window.location.hash.replace("#", ""), 10);
-    return Number.isFinite(hash) && hash > 0
-      ? Math.min(hash - 1, slides.length - 1)
-      : 0;
+    return Number.isFinite(hash) && hash > 0 ? Math.min(hash - 1, slides.length - 1) : 0;
   });
   const [step, setStep] = useState(0);
   const [showHud, setShowHud] = useState(true);
@@ -101,6 +72,8 @@ function Viewer() {
     else prev();
   };
 
+  const revealHud = () => setShowHud(true);
+
   const toggleFullscreen = useCallback(() => {
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => undefined);
@@ -117,47 +90,7 @@ function Viewer() {
     onTogglePresent: toggleFullscreen,
   });
 
-  // Sync with a presenter window over BroadcastChannel.
-  const channelRef = useRef<BroadcastChannel | null>(null);
-  const navRef = useRef({ next, prev, first, last });
-  navRef.current = { next, prev, first, last };
-  const stateRef = useRef({ index, step });
-  stateRef.current = { index, step };
-
-  useEffect(() => {
-    const ch = new BroadcastChannel(CHANNEL);
-    channelRef.current = ch;
-    ch.onmessage = (e: MessageEvent<DeckMessage>) => {
-      const m = e.data;
-      if (m.type === "nav") navRef.current[m.action]();
-      else if (m.type === "request")
-        ch.postMessage({ type: "state", ...stateRef.current });
-    };
-    return () => {
-      ch.close();
-      channelRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    channelRef.current?.postMessage({ type: "state", index, step });
-  }, [index, step]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.key === "p" || e.key === "P") && !e.metaKey && !e.ctrlKey) {
-        window.open(
-          `${window.location.pathname}?presenter`,
-          "presenter",
-          "width=900,height=680"
-        );
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  useEffect(() => {
+  useEffect(function preloadImages() {
     const urls = new Set<string>();
     for (const s of slides) {
       if (s.image) urls.add(s.image);
@@ -166,7 +99,7 @@ function Viewer() {
         if (typeof b !== "string") {
           if (b.image) urls.add(b.image);
           b.media?.forEach((u) => {
-            if (!/\.(webm|mp4|mov|m4v)$/i.test(u)) urls.add(u);
+            if (!isVideoUrl(u)) urls.add(u);
           });
         }
       });
@@ -177,15 +110,21 @@ function Viewer() {
     });
   }, []);
 
-  useEffect(() => {
-    window.location.hash = String(index + 1);
-  }, [index]);
+  useEffect(
+    function syncHash() {
+      window.location.hash = String(index + 1);
+    },
+    [index],
+  );
 
-  useEffect(() => {
-    setShowHud(true);
-    const t = window.setTimeout(() => setShowHud(false), 2200);
-    return () => window.clearTimeout(t);
-  }, [index]);
+  useEffect(
+    function autoHideHud() {
+      setShowHud(true);
+      const timer = window.setTimeout(() => setShowHud(false), 2200);
+      return () => window.clearTimeout(timer);
+    },
+    [index],
+  );
 
   const slide = slides[index];
   if (!slide) return null;
@@ -193,7 +132,7 @@ function Viewer() {
   return (
     <div
       className="viewer"
-      onMouseMove={() => setShowHud(true)}
+      onMouseMove={revealHud}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
