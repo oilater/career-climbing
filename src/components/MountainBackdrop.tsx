@@ -2,7 +2,7 @@ export function MountainBackdrop() {
   return (
     <img
       className="mountain-backdrop"
-      src="/images/mountain.png"
+      src="/images/mountain.webp"
       alt=""
       aria-hidden
       fetchPriority="high"

@@ -48,7 +48,7 @@ const personJsonLd = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  preload("/images/mountain.png", { as: "image", fetchPriority: "high" });
+  preload("/images/mountain.webp", { as: "image", fetchPriority: "high" });
 
   return (
     <html lang="ko" className={pretendard.variable}>
