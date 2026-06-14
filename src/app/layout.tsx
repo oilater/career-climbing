@@ -2,9 +2,16 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { preload } from "react-dom";
 import { Analytics } from "@vercel/analytics/next";
-import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+import localFont from "next/font/local";
 import "../index.css";
 import { seo } from "../config";
+
+const pretendard = localFont({
+  src: "./fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(seo.url),
@@ -44,7 +51,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   preload("/images/mountain.png", { as: "image", fetchPriority: "high" });
 
   return (
-    <html lang="ko">
+    <html lang="ko" className={pretendard.variable}>
       <body>
         {children}
         <script

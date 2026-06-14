@@ -7,6 +7,7 @@
   --pad-side: 9vw;
   --content-max: 1100px;
   font-family:
+    var(--font-pretendard),
     "Pretendard Variable",
     Pretendard,
     ui-sans-serif,
